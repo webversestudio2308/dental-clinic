@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luméra Dental Studio | Advanced Dental Care & Cosmetic Dentistry</title>
+    <meta name="description" content="Ultra-premium, modern dental clinic and cosmetic dentistry website with comprehensive smile care, before-and-after transformations, and instant appointment booking.">
+    
+    <!-- Favicon (Inline SVG) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23111315' d='M50 15c-15 0-25 10-25 25 0 8 5 15 10 20v20c0 5 5 10 10 10s10-5 10-10v-20c5-5 10-12 10-20 0-15-10-25-25-25zm0 10c10 0 15 8 15 15 0 6-4 12-8 15v15c0 2-2 4-4 4s-4-2-4-4v-15c-4-3-8-9-8-15 0-7 5-15 15-15z'/></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (via CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            charcoal: '#111315', // Near Black / Deep Charcoal
+                            teal: '#1A4D4D',     // Elegant Teal
+                            mint: '#EBF3F3',     // Soft Mint
+                            gold: '#C5A880',     // Champagne Gold
+                            ivory: '#FAF9F6',    // Soft Ivory
+                            surface: '#FFFFFF',  // Pure White
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        /* Base & Scrollbar */
+        body { background-color: #FAF9F6; color: #111315; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAF9F6; }
+        ::-webkit-scrollbar-thumb { background: #1A4D4D; border-radius: 4px; }
+        
+        /* Reveal Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+
+        /* Before/After Slider */
+        .ba-slider-container { cursor: ew-resize; touch-action: pan-y; }
+        .ba-before-image { clip-path: inset(0 50% 0 0); }
+        /* Simulated Before effect for demo */
+        .simulated-before { filter: sepia(0.4) brightness(0.85) contrast(0.95); } 
+
+        /* Header transition */
+        .header-scrolled { background-color: rgba(250, 249, 246, 0.95); box-shadow: 0 4px 20px rgba(0,0,0,0.03); padding-top: 1rem; padding-bottom: 1rem; backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26, 77, 77, 0.1); }
+        
+        /* Mobile Menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
+
+        /* Navigation Underline Effect */
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 1px; background-color: #1A4D4D; transition: width 0.3s ease; }
+        .nav-link:hover::after { width: 100%; }
+        
+        /* Buttons & Hover Effects */
+        .btn-gold { position: relative; overflow: hidden; z-index: 1; }
+        .btn-gold::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background-color: #b59870; transition: height 0.3s ease; z-index: -1; }
+        .btn-gold:hover::after { height: 100%; }
+
+        /* Service Cards */
+        .service-card { transition: all 0.4s ease; border: 1px solid rgba(0,0,0,0.05); }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.04); border-color: rgba(197, 168, 128, 0.3); }
+        .service-card:hover img { transform: scale(1.05); }
+
+        /* Custom Curved Dividers */
+        .curve-bottom { position: absolute; bottom: 0; left: 0; width: 100%; overflow: hidden; line-height: 0; transform: translateY(99%); z-index: 10; }
+        .curve-bottom svg { display: block; width: calc(100% + 1.3px); height: 60px; }
+        @media (min-width: 1024px) { .curve-bottom svg { height: 120px; } }
+        
+        /* Modals */
+        .modal { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal.open { opacity: 1; pointer-events: auto; }
+        .modal-content { transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal.open .modal-content { transform: translateY(0); }
+
+        /* Details / Summary Accordion */
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary ~ * { animation: slideDown 0.3s ease-in-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Mobile Screen-Fit Hero Background Carousel & Text Legibility */
+        @media (max-width: 768px) {
+            #hero-bg-carousel {
+                height: 100vh !important;
+                height: 100dvh !important;
+                width: 100% !important;
+            }
+            .hero-bg-slide {
+                height: 100vh !important;
+                height: 100dvh !important;
+                width: 100% !important;
+                object-fit: cover !important;
+                object-position: center !important;
+            }
+            .hero-title {
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 24px rgba(17, 19, 21, 0.9);
+            }
+            .hero-title-gold {
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(17, 19, 21, 0.85);
+            }
+            .hero-desc {
+                text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
+            }
+            .hero-tag {
+                background-color: rgba(17, 19, 21, 0.85) !important;
+                backdrop-filter: blur(12px) !important;
+            }
+            .hero-btn-secondary {
+                background-color: rgba(17, 19, 21, 0.8) !important;
+                backdrop-filter: blur(12px) !important;
+                border-color: rgba(255, 255, 255, 0.3) !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-brand-charcoal selection:bg-brand-gold selection:text-white">
+
+    <!-- Configuration Object -->
+    <script>
+        const CLINIC_CONFIG = {
+            clinicName: "LUMÉRA DENTAL STUDIO",
+            tagline: "Advanced Dentistry. Exceptional Smiles.",
+            phoneDisplay: "+91 98765 43210",
+            phoneValue: "tel:+919876543210",
+            whatsappValue: "919876543210",
+            email: "info@lumeradental.demo",
+            address: "Premium Corporate Park, SG Highway, Ahmedabad, Gujarat",
+            openingHours: "Monday - Saturday, 9:00 AM - 7:00 PM",
+            mapsUrl: "https://maps.google.com/?q=Ahmedabad",
+            doctorName: "Dr. Aarav Mehta",
+            doctorSpecialization: "Consultant Dentist & Cosmetic Specialist",
+            social: {
+                instagram: "https://instagram.com/",
+                facebook: "https://facebook.com/",
+                youtube: "https://youtube.com/"
+            }
+        };
+    </script>
+
+    <!-- HEADER -->
+    <header id="header" class="fixed w-full z-50 transition-all duration-300 py-6 bg-brand-charcoal lg:bg-transparent text-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 z-50 relative group">
+                <svg class="w-7 h-7 text-brand-gold group-hover:scale-110 transition-transform" viewBox="0 0 100 100" fill="currentColor">
+                    <path d="M50 10C25 10 10 30 10 50c0 25 20 40 40 40s40-15 40-40C90 30 75 10 50 10zm0 15c12 0 20 8 20 18v15c0 4-2 7-5 7h-5c-3 0-5-3-5-7V43c0-6-5-10-10-10s-10 4-10 10v15c0 4-2 7-5 7h-5c-3 0-5-3-5-7V43c0-10 8-18 20-18z"/>
+                </svg>
+                <span class="font-serif font-semibold text-lg tracking-widest uppercase header-logo-text" data-config="clinicName">LUMÉRA</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center gap-10">
+                <a href="#about" class="text-sm font-medium tracking-wide nav-link hover:text-brand-gold transition-colors">ABOUT</a>
+                <a href="#services" class="text-sm font-medium tracking-wide nav-link hover:text-brand-gold transition-colors">SERVICES</a>
+                <a href="#results" class="text-sm font-medium tracking-wide nav-link hover:text-brand-gold transition-colors">RESULTS</a>
+                <a href="#team" class="text-sm font-medium tracking-wide nav-link hover:text-brand-gold transition-colors">DOCTORS</a>
+                <a href="#pricing" class="text-sm font-medium tracking-wide nav-link hover:text-brand-gold transition-colors">PRICING</a>
+                <a href="#contact" class="text-sm font-medium tracking-wide nav-link hover:text-brand-gold transition-colors">CONTACT</a>
+            </nav>
+
+            <!-- CTA & Mobile Toggle -->
+            <div class="flex items-center gap-5">
+                <a href="#appointment" class="hidden lg:inline-flex items-center justify-center bg-brand-gold text-brand-charcoal px-7 py-3 rounded-none text-xs font-semibold tracking-widest uppercase btn-gold transition-colors">
+                    BOOK APPOINTMENT
+                </a>
+                <button id="mobile-menu-btn" class="lg:hidden z-50 relative p-2 text-white" aria-label="Toggle Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-brand-charcoal z-40 flex flex-col justify-center items-center gap-8 lg:hidden pt-20">
+            <a href="#about" class="mobile-link text-3xl font-serif text-white hover:text-brand-gold transition-colors">About Clinic</a>
+            <a href="#services" class="mobile-link text-3xl font-serif text-white hover:text-brand-gold transition-colors">Our Services</a>
+            <a href="#results" class="mobile-link text-3xl font-serif text-white hover:text-brand-gold transition-colors">Smile Gallery</a>
+            <a href="#team" class="mobile-link text-3xl font-serif text-white hover:text-brand-gold transition-colors">Our Team</a>
+            <a href="#pricing" class="mobile-link text-3xl font-serif text-white hover:text-brand-gold transition-colors">Pricing</a>
+            <a href="#contact" class="mobile-link text-3xl font-serif text-white hover:text-brand-gold transition-colors">Contact</a>
+            <a href="#appointment" class="mobile-link mt-6 bg-brand-gold text-brand-charcoal px-10 py-4 rounded-none text-sm font-bold tracking-widest uppercase">Book Appointment</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center pt-28 pb-36 overflow-hidden bg-brand-charcoal">
+        <!-- Background Ambient Lighting & Auto-changing Image Carousel (Every 2 seconds) -->
+        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+            <!-- Background Image Carousel: Mobile screen-size responsive (100vh / 100dvh sticky on mobile, full-height on desktop) -->
+            <div id="hero-bg-carousel" class="sticky top-0 w-full h-screen h-[100dvh] md:absolute md:inset-0 md:h-full">
+                <img src="./dental_exam_chair.jpg" alt="Modern Dental Studio Operatory" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-100">
+                <img src="./digital_scanner_3d.jpg" alt="3D Intraoral Scanner Suite" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+                <img src="./cosmetic_mirror_smile.jpg" alt="Cosmetic Dentistry & Aesthetic Smile" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+                <img src="./whitening_laser.jpg" alt="Laser Teeth Whitening System" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+                <img src="./implant_treatment.jpg" alt="Advanced Dental Implants" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+                <img src="./dental_xray_diag.jpg" alt="Digital Dental Diagnostics & CBCT" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+                <img src="./root_canal_endo.jpg" alt="Microscopic Endodontics" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+                <img src="./futuristic_tooth.jpg" alt="Tooth Regeneration & Periodontics" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+                <img src="./smile_whitening.jpg" alt="Radiant Smile Transformation" referrerpolicy="no-referrer" class="hero-bg-slide absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out opacity-0">
+            </div>
+
+            <!-- Soft Overlay Gradients ensuring clear visibility of changing background images while keeping text 100% legible on both mobile and desktop -->
+            <div class="sticky top-0 w-full h-screen h-[100dvh] md:absolute md:inset-0 md:h-full pointer-events-none z-10">
+                <div class="absolute inset-0 bg-gradient-to-b from-brand-charcoal/95 via-brand-charcoal/88 to-brand-charcoal/95 md:bg-gradient-to-r md:from-brand-charcoal/90 md:via-brand-charcoal/75 md:to-brand-charcoal/60"></div>
+                <div class="absolute top-1/4 -left-40 w-96 h-96 bg-brand-teal/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute bottom-10 right-0 w-[500px] h-[500px] bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full">
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Left Column: Copy & CTAs -->
+                <div class="lg:col-span-7 animate-fade-in relative z-20">
+                    <div class="inline-flex items-center gap-3 px-4 py-2 hero-tag bg-brand-charcoal/80 border border-brand-gold/40 mb-8 backdrop-blur-md shadow-lg">
+                        <span class="w-2 h-2 rounded-full bg-brand-gold animate-pulse"></span>
+                        <p class="text-brand-gold text-xs font-semibold tracking-[0.2em] uppercase">Advanced Dentistry • Cosmetic Artistry</p>
+                    </div>
+                    
+                    <h1 class="hero-title font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-8 text-white">
+                        Elevating Smiles.<br>
+                        <span class="hero-title-gold italic font-light text-brand-gold">Transforming Lives.</span>
+                    </h1>
+                    
+                    <p class="hero-desc text-brand-ivory/90 text-base sm:text-lg mb-10 font-light leading-relaxed max-w-xl">
+                        Step into a serene sanctuary of modern dentistry. We combine advanced 3D digital technology, gentle painless care, and personalized smile architecture in a boutique luxury studio.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-5 mb-14">
+                        <a href="#appointment" class="bg-brand-gold text-brand-charcoal px-8 py-4 rounded-none text-xs font-bold tracking-widest uppercase btn-gold inline-flex items-center justify-center gap-3 shadow-xl hover:shadow-brand-gold/20">
+                            Book Consultation
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="#services" class="hero-btn-secondary border border-white/30 text-white px-8 py-4 rounded-none text-xs font-semibold tracking-widest uppercase hover:bg-white/10 hover:border-white transition-all inline-flex items-center justify-center">
+                            Explore Treatments
+                        </a>
+                    </div>
+
+                    <!-- Trust Bar with Real Patient Avatars & Stats -->
+                    <div class="flex flex-wrap items-center gap-6 pt-6 border-t border-white/10 text-white/70">
+                        <div class="flex -space-x-3">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&h=120&q=80" alt="Patient" referrerpolicy="no-referrer" class="w-10 h-10 rounded-full border-2 border-brand-charcoal object-cover">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80" alt="Patient" referrerpolicy="no-referrer" class="w-10 h-10 rounded-full border-2 border-brand-charcoal object-cover">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&h=120&q=80" alt="Patient" referrerpolicy="no-referrer" class="w-10 h-10 rounded-full border-2 border-brand-charcoal object-cover">
+                            <div class="w-10 h-10 rounded-full bg-brand-teal text-white flex items-center justify-center text-xs font-bold border-2 border-brand-charcoal">
+                                5k+
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1 text-brand-gold mb-1 drop-shadow-sm">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <span class="text-white text-xs font-bold ml-1">4.9 / 5</span>
+                            </div>
+                            <p class="text-xs text-brand-ivory/80 hero-desc">From 850+ Verified Patient Reviews</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Hero Dentist Visual Showcase (Dr. Aarav Mehta) -->
+                <div class="lg:col-span-5 relative mt-6 lg:mt-0">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        
+                        <!-- Main Dentist Showcase Frame -->
+                        <div class="relative overflow-hidden border border-brand-gold/30 shadow-2xl bg-brand-charcoal/50 group">
+                            <!-- High resolution Dr. Aarav Mehta (Male Dentist) image -->
+                            <img src="./dr_aarav_mehta.jpg" alt="Dr. Aarav Mehta - Lead Aesthetic Specialist" referrerpolicy="no-referrer" class="w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-105">
+                            
+                            <!-- Soft Gradient Vignette -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Doctor Name Tag overlay inside image -->
+                            <div class="absolute bottom-5 left-5 right-5 p-4 bg-brand-charcoal/90 backdrop-blur-md border border-white/10 flex justify-between items-center">
+                                <div>
+                                    <p class="text-brand-gold text-[10px] font-bold tracking-widest uppercase">Lead Dental Practitioner</p>
+                                    <p class="font-serif text-white text-lg" data-config="doctorName">Dr. Aarav Mehta</p>
+                                    <p class="text-white/60 text-xs font-light">MDS Cosmetic Dentistry & Implants</p>
+                                </div>
+                                <div class="w-10 h-10 bg-brand-teal flex items-center justify-center text-white">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Badge 1: 3D Digital Smile Scan -->
+                        <div class="absolute -top-6 -right-4 sm:-right-6 bg-brand-charcoal/95 backdrop-blur-md border border-brand-gold/40 p-4 shadow-xl animate-float hidden sm:flex items-center gap-3">
+                            <div class="w-10 h-10 bg-brand-gold text-brand-charcoal flex items-center justify-center font-bold">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-white text-xs font-bold uppercase tracking-wider">3D Intraoral Scan</p>
+                                <p class="text-brand-ivory/60 text-[11px] font-light">Instant digital preview in 10 mins</p>
+                            </div>
+                        </div>
+
+                        <!-- Floating Badge 2: Pain-Free Philosophy -->
+                        <div class="absolute top-1/2 -left-6 bg-brand-teal/95 backdrop-blur-md border border-white/20 p-4 shadow-xl hidden md:flex items-center gap-3">
+                            <div class="w-8 h-8 bg-white/10 flex items-center justify-center text-white">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-white text-xs font-bold uppercase tracking-wider">Zero Pain Care</p>
+                                <p class="text-brand-mint/80 text-[10px]">Gentle computer-assisted anesthesia</p>
+                            </div>
+                        </div>
+
+                        <!-- Decorative luxury border accent -->
+                        <div class="absolute -bottom-4 -left-4 w-28 h-28 border border-brand-gold/30 -z-10 pointer-events-none"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Curved Bottom SVG Divider -->
+        <div class="curve-bottom">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <path d="M0,120 C480,0 960,0 1440,120 Z" fill="#FAF9F6"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION (Visual Clinic Composition) -->
+    <section id="about" class="py-28 bg-brand-ivory relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-12 gap-16 items-center">
+                
+                <!-- Left: Luxury Clinic & Dentistry Image Collage -->
+                <div class="lg:col-span-6 reveal">
+                    <div class="relative">
+                        <!-- Primary Image: Caring Dentist & Patient Examination in Chair -->
+                        <div class="overflow-hidden border border-brand-charcoal/10 shadow-lg relative aspect-[4/3]">
+                            <img src="./dental_exam_chair.jpg" alt="Dentist performing comprehensive clinical examination" referrerpolicy="no-referrer" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                            <div class="absolute top-4 left-4 bg-brand-charcoal text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5">
+                                Boutique Care
+                            </div>
+                        </div>
+
+                        <!-- Secondary Overlapping Image: 3D Intraoral Scanner & Technology -->
+                        <div class="hidden sm:block absolute -bottom-10 -right-6 w-3/5 aspect-[4/3] overflow-hidden border-4 border-brand-ivory shadow-2xl">
+                            <img src="./digital_scanner_3d.jpg" alt="3D Intraoral Digital Scanning Suite" referrerpolicy="no-referrer" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                            <div class="absolute bottom-3 right-3 bg-brand-gold text-brand-charcoal text-[9px] font-bold tracking-widest uppercase px-2 py-1">
+                                3D Optical Scan
+                            </div>
+                        </div>
+
+                        <!-- Aesthetic Floating Tag -->
+                        <div class="absolute top-1/2 -left-6 bg-white shadow-xl border border-brand-charcoal/5 p-4 hidden md:flex items-center gap-3">
+                            <div class="w-10 h-10 bg-brand-mint text-brand-teal flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-brand-charcoal uppercase tracking-wider">Hospital-Grade Safety</p>
+                                <p class="text-[11px] text-gray-500 font-light">Class-B Autoclave Sterilization</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: About Details & Numbers -->
+                <div class="lg:col-span-6 reveal delay-100">
+                    <p class="text-brand-teal text-xs font-semibold tracking-[0.2em] uppercase mb-4">About Luméra Dental Studio</p>
+                    <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-brand-charcoal mb-6 leading-tight">
+                        Modern Dentistry.<br>
+                        <span class="italic font-light text-brand-teal">A Reimagined Experience.</span>
+                    </h2>
+                    
+                    <p class="text-gray-600 font-light leading-relaxed text-base sm:text-lg mb-8">
+                        We believe dental visits should feel calming, empowering, and completely free of anxiety. At <strong class="font-medium text-brand-charcoal">Luméra</strong>, we fuse German medical technology with a patient-first luxury boutique atmosphere. Every smile we touch is crafted with anatomical precision, preserving your natural teeth while achieving breathtaking aesthetic results.
+                    </p>
+
+                    <!-- Key Pillars -->
+                    <div class="grid sm:grid-cols-2 gap-4 mb-10">
+                        <div class="flex items-start gap-3">
+                            <div class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-teal flex items-center justify-center mt-0.5 shrink-0">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-brand-charcoal">Pain-Free Protocol</h4>
+                                <p class="text-xs text-gray-500 font-light">Computer-guided gentle numbing and sedation options.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-teal flex items-center justify-center mt-0.5 shrink-0">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-brand-charcoal">Digital Smile Design</h4>
+                                <p class="text-xs text-gray-500 font-light">Preview your exact future smile in 3D before starting.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 Metric Counters -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 border-t border-brand-charcoal/10 pt-8">
+                        <div>
+                            <p class="font-serif text-3xl text-brand-teal mb-1">15+</p>
+                            <p class="text-[11px] tracking-wider uppercase text-gray-500 font-medium">Years Care</p>
+                        </div>
+                        <div>
+                            <p class="font-serif text-3xl text-brand-teal mb-1">5,000+</p>
+                            <p class="text-[11px] tracking-wider uppercase text-gray-500 font-medium">Smiles Restored</p>
+                        </div>
+                        <div>
+                            <p class="font-serif text-3xl text-brand-teal mb-1">100%</p>
+                            <p class="text-[11px] tracking-wider uppercase text-gray-500 font-medium">Digital Workflow</p>
+                        </div>
+                        <div>
+                            <p class="font-serif text-3xl text-brand-teal mb-1">4.9 ★</p>
+                            <p class="text-[11px] tracking-wider uppercase text-gray-500 font-medium">Patient Rating</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-28 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-20 reveal">
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <div class="h-px w-12 bg-brand-gold"></div>
+                    <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-brand-charcoal">Our <span class="italic font-light text-brand-teal">Boutique</span> Treatments</h2>
+                    <div class="h-px w-12 bg-brand-gold"></div>
+                </div>
+                <p class="text-gray-500 font-light max-w-2xl mx-auto text-base sm:text-lg">
+                    Comprehensive, aesthetic, and restorative dental procedures tailored with mathematical precision to your unique facial aesthetics.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Service 1: Cosmetic Dentistry -->
+                <div class="service-card group bg-brand-ivory border border-brand-charcoal/5 overflow-hidden flex flex-col justify-between reveal">
+                    <div>
+                        <!-- Dental Treatment Image -->
+                        <div class="relative aspect-[16/10] overflow-hidden">
+                            <img src="./cosmetic_mirror_smile.jpg" alt="Cosmetic Dentistry & Porcelain Veneers" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal/60 via-transparent to-transparent"></div>
+                            <span class="absolute top-3 left-3 bg-brand-charcoal/90 backdrop-blur-sm text-brand-gold text-[10px] font-bold tracking-widest uppercase px-2.5 py-1">
+                                Aesthetic Artistry
+                            </span>
+                        </div>
+                        <div class="p-8 pb-4">
+                            <h3 class="font-serif text-2xl text-brand-charcoal mb-3 group-hover:text-brand-teal transition-colors">Cosmetic Dentistry</h3>
+                            <p class="text-gray-600 font-light text-sm mb-6 leading-relaxed">
+                                Transform your smile with hand-crafted ultra-thin porcelain veneers, biomimetic composite bonding, and bespoke digital smile design.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Custom Shading</span>
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Minimal Prep</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pb-8">
+                        <button onclick="openModal('modal-service-1')" class="inline-flex items-center gap-2 text-brand-charcoal text-xs font-semibold tracking-widest uppercase border-b border-brand-gold pb-1 hover:text-brand-teal transition-all group-hover:gap-3">
+                            <span>Explore Treatment</span>
+                            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service 2: Dental Implants -->
+                <div class="service-card group bg-brand-ivory border border-brand-charcoal/5 overflow-hidden flex flex-col justify-between reveal delay-100">
+                    <div>
+                        <!-- Dental Treatment Image -->
+                        <div class="relative aspect-[16/10] overflow-hidden">
+                            <img src="./implant_treatment.jpg" alt="Advanced Dental Implants Titanium Restoration" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal/60 via-transparent to-transparent"></div>
+                            <span class="absolute top-3 left-3 bg-brand-charcoal/90 backdrop-blur-sm text-brand-gold text-[10px] font-bold tracking-widest uppercase px-2.5 py-1">
+                                Restorative
+                            </span>
+                        </div>
+                        <div class="p-8 pb-4">
+                            <h3 class="font-serif text-2xl text-brand-charcoal mb-3 group-hover:text-brand-teal transition-colors">Dental Implants</h3>
+                            <p class="text-gray-600 font-light text-sm mb-6 leading-relaxed">
+                                Lifetime tooth restoration using Swiss titanium & zirconia implants with computer-guided surgical precision for permanent confidence.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">3D Guided Placement</span>
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Lifetime Warranty</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pb-8">
+                        <button onclick="openModal('modal-service-2')" class="inline-flex items-center gap-2 text-brand-charcoal text-xs font-semibold tracking-widest uppercase border-b border-brand-gold pb-1 hover:text-brand-teal transition-all group-hover:gap-3">
+                            <span>Explore Treatment</span>
+                            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service 3: Orthodontics & Clear Aligners -->
+                <div class="service-card group bg-brand-ivory border border-brand-charcoal/5 overflow-hidden flex flex-col justify-between reveal delay-200">
+                    <div>
+                        <!-- Dental Treatment Image -->
+                        <div class="relative aspect-[16/10] overflow-hidden">
+                            <img src="./smile_whitening.jpg" alt="Clear Aligners and Orthodontics" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal/60 via-transparent to-transparent"></div>
+                            <span class="absolute top-3 left-3 bg-brand-charcoal/90 backdrop-blur-sm text-brand-gold text-[10px] font-bold tracking-widest uppercase px-2.5 py-1">
+                                Alignment
+                            </span>
+                        </div>
+                        <div class="p-8 pb-4">
+                            <h3 class="font-serif text-2xl text-brand-charcoal mb-3 group-hover:text-brand-teal transition-colors">Clear Aligners</h3>
+                            <p class="text-gray-600 font-light text-sm mb-6 leading-relaxed">
+                                Virtually invisible orthodontic trays calibrated by 3D AI simulation to effortlessly straighten your teeth without brackets or wires.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">100% Invisible</span>
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Faster Results</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pb-8">
+                        <button onclick="openModal('modal-service-3')" class="inline-flex items-center gap-2 text-brand-charcoal text-xs font-semibold tracking-widest uppercase border-b border-brand-gold pb-1 hover:text-brand-teal transition-all group-hover:gap-3">
+                            <span>Explore Treatment</span>
+                            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 4: Root Canal Therapy -->
+                <div class="service-card group bg-brand-ivory border border-brand-charcoal/5 overflow-hidden flex flex-col justify-between reveal">
+                    <div>
+                        <!-- Dental Treatment Image -->
+                        <div class="relative aspect-[16/10] overflow-hidden">
+                            <img src="./root_canal_endo.jpg" alt="Microscopic Endodontics 3D Cross Section" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal/60 via-transparent to-transparent"></div>
+                            <span class="absolute top-3 left-3 bg-brand-charcoal/90 backdrop-blur-sm text-brand-gold text-[10px] font-bold tracking-widest uppercase px-2.5 py-1">
+                                Endodontics
+                            </span>
+                        </div>
+                        <div class="p-8 pb-4">
+                            <h3 class="font-serif text-2xl text-brand-charcoal mb-3 group-hover:text-brand-teal transition-colors">Microscopic Root Canal</h3>
+                            <p class="text-gray-600 font-light text-sm mb-6 leading-relaxed">
+                                Save infected or compromised teeth in single-visit sessions using 25x magnification dental operating microscopes and painless Rotary systems.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Single Sitting</span>
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Zero Discomfort</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pb-8">
+                        <button onclick="openModal('modal-service-general')" class="inline-flex items-center gap-2 text-brand-charcoal text-xs font-semibold tracking-widest uppercase border-b border-brand-gold pb-1 hover:text-brand-teal transition-all group-hover:gap-3">
+                            <span>Explore Treatment</span>
+                            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service 5: Periodontal & Gum Rejuvenation -->
+                <div class="service-card group bg-brand-ivory border border-brand-charcoal/5 overflow-hidden flex flex-col justify-between reveal delay-100">
+                    <div>
+                        <!-- Dental Treatment Image -->
+                        <div class="relative aspect-[16/10] overflow-hidden">
+                            <img src="./futuristic_tooth.jpg" alt="Periodontal Laser Care & Tooth Regeneration" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal/60 via-transparent to-transparent"></div>
+                            <span class="absolute top-3 left-3 bg-brand-charcoal/90 backdrop-blur-sm text-brand-gold text-[10px] font-bold tracking-widest uppercase px-2.5 py-1">
+                                Gum Health
+                            </span>
+                        </div>
+                        <div class="p-8 pb-4">
+                            <h3 class="font-serif text-2xl text-brand-charcoal mb-3 group-hover:text-brand-teal transition-colors">Laser Periodontics</h3>
+                            <p class="text-gray-600 font-light text-sm mb-6 leading-relaxed">
+                                Protect the foundation of your smile with non-surgical diode laser therapy, deep ultrasonic debridement, and cosmetic gum contouring.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Laser Precision</span>
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Rapid Healing</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pb-8">
+                        <button onclick="openModal('modal-service-general')" class="inline-flex items-center gap-2 text-brand-charcoal text-xs font-semibold tracking-widest uppercase border-b border-brand-gold pb-1 hover:text-brand-teal transition-all group-hover:gap-3">
+                            <span>Explore Treatment</span>
+                            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service 6: Teeth Whitening -->
+                <div class="service-card group bg-brand-ivory border border-brand-charcoal/5 overflow-hidden flex flex-col justify-between reveal delay-200">
+                    <div>
+                        <!-- Dental Treatment Image: Blue LED Laser Teeth Whitening with protective goggles -->
+                        <div class="relative aspect-[16/10] overflow-hidden">
+                            <img src="./whitening_laser.jpg" alt="Blue LED Laser Teeth Whitening" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal/60 via-transparent to-transparent"></div>
+                            <span class="absolute top-3 left-3 bg-brand-charcoal/90 backdrop-blur-sm text-brand-gold text-[10px] font-bold tracking-widest uppercase px-2.5 py-1">
+                                Radiant Brightness
+                            </span>
+                        </div>
+                        <div class="p-8 pb-4">
+                            <h3 class="font-serif text-2xl text-brand-charcoal mb-3 group-hover:text-brand-teal transition-colors">Laser Teeth Whitening</h3>
+                            <p class="text-gray-600 font-light text-sm mb-6 leading-relaxed">
+                                Professional in-clinic blue LED laser whitening that brightens your teeth up to 8 shades in just 45 minutes with built-in sensitivity protection.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Up to 8 Shades Whiter</span>
+                                <span class="text-[11px] bg-white text-gray-600 px-2.5 py-1 border border-brand-charcoal/5 font-light">Anti-Sensitivity</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pb-8">
+                        <button onclick="openModal('modal-service-general')" class="inline-flex items-center gap-2 text-brand-charcoal text-xs font-semibold tracking-widest uppercase border-b border-brand-gold pb-1 hover:text-brand-teal transition-all group-hover:gap-3">
+                            <span>Explore Treatment</span>
+                            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-16 reveal">
+                <a href="#appointment" class="inline-flex items-center gap-3 text-brand-teal font-semibold text-xs tracking-widest uppercase hover:text-brand-charcoal transition-colors border-b-2 border-brand-teal pb-1">
+                    Book Consultation for Your Treatment
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESULTS (BEFORE / AFTER) SECTION -->
+    <section id="results" class="py-32 bg-brand-charcoal text-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16 reveal">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                    <svg class="w-4 h-4 text-brand-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                    <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-white">Real Smiles. <span class="italic font-light text-brand-gold">Real Transformations.</span></h2>
+                    <svg class="w-4 h-4 text-brand-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                </div>
+                <p class="text-white/60 font-light max-w-2xl mx-auto text-sm sm:text-base">
+                    Slide back and forth to examine our smile whitening and cosmetic restorations. Every patient receives a bespoke, natural aesthetic.
+                </p>
+            </div>
+
+            <!-- Before/After Slider Component with Real High-Res Teeth Image -->
+            <div class="reveal max-w-4xl mx-auto relative shadow-2xl mb-20">
+                <div class="ba-slider-container relative w-full aspect-[16/9] md:aspect-[21/9] bg-brand-charcoal overflow-hidden border border-brand-gold/30" id="ba-slider">
+                    
+                    <!-- AFTER IMAGE (Base - Radiant White Teeth) -->
+                    <img src="./smile_whitening.jpg" class="absolute inset-0 w-full h-full object-cover pointer-events-none" alt="After Treatment - Luméra Smile" referrerpolicy="no-referrer">
+                    
+                    <!-- BEFORE IMAGE (Clipped overlay with realistic warm hue filter) -->
+                    <div class="ba-before-image absolute inset-0 w-full pointer-events-none" id="ba-before" style="clip-path: inset(0 50% 0 0);">
+                        <img src="./smile_whitening.jpg" class="simulated-before absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none filter sepia-[0.35] brightness-90" alt="Before Treatment" referrerpolicy="no-referrer" style="width: 100%; height: 100%;">
+                    </div>
+
+                    <!-- SLIDER HANDLE -->
+                    <div class="absolute top-0 bottom-0 left-1/2 w-0.5 bg-brand-gold cursor-ew-resize transform -translate-x-1/2 flex items-center justify-center z-10" id="ba-handle">
+                        <div class="w-10 h-10 bg-brand-gold flex items-center justify-center text-brand-charcoal shadow-2xl border-2 border-white">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Labels -->
+                    <div class="absolute bottom-6 left-6 bg-brand-charcoal/90 backdrop-blur-sm border border-white/20 text-white text-[10px] px-3.5 py-1.5 font-bold tracking-widest uppercase z-10">
+                        Before Whitening
+                    </div>
+                    <div class="absolute bottom-6 right-6 bg-brand-gold text-brand-charcoal text-[10px] px-3.5 py-1.5 font-bold tracking-widest uppercase z-10">
+                        After Luméra Laser Care
+                    </div>
+                </div>
+                <p class="text-center text-xs text-white/50 font-light mt-4">Drag the slider horizontally to compare before and after treatment.</p>
+            </div>
+
+            <!-- Smile Transformation Case Gallery (Teeth & Results) -->
+            <div class="grid md:grid-cols-3 gap-8 reveal delay-100">
+                
+                <!-- Case 1 -->
+                <div class="bg-white/5 border border-white/10 overflow-hidden group">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <img src="./cosmetic_mirror_smile.jpg" alt="Porcelain Veneers Makeover Teeth" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute top-3 right-3 bg-brand-teal text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">
+                            Veneers Makeover
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-serif text-lg text-white mb-2">Porcelain Veneers (8 Units)</h4>
+                        <p class="text-xs text-white/60 font-light leading-relaxed mb-4">Corrected minor discoloration, enamel chipping, and spacing for a harmonized, red-carpet smile.</p>
+                        <div class="flex justify-between items-center text-[11px] text-brand-gold border-t border-white/10 pt-3">
+                            <span>Duration: 2 Visits</span>
+                            <span class="font-semibold">Complete Natural Look</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="bg-white/5 border border-white/10 overflow-hidden group">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <img src="./smile_whitening.jpg" alt="Clear Aligners Orthodontics Smile" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute top-3 right-3 bg-brand-gold text-brand-charcoal text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">
+                            Invisible Aligners
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-serif text-lg text-white mb-2">Clear Aligner Therapy</h4>
+                        <p class="text-xs text-white/60 font-light leading-relaxed mb-4">Resolved severe lower crowding and crossbite without visible metal brackets in 9 months.</p>
+                        <div class="flex justify-between items-center text-[11px] text-brand-gold border-t border-white/10 pt-3">
+                            <span>Duration: 9 Months</span>
+                            <span class="font-semibold">Zero Wire Discomfort</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="bg-white/5 border border-white/10 overflow-hidden group">
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        <img src="./implant_treatment.jpg" alt="Single Tooth Implant Restoration" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute top-3 right-3 bg-brand-teal text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">
+                            Single Implant
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-serif text-lg text-white mb-2">Zirconia Molar Implant</h4>
+                        <p class="text-xs text-white/60 font-light leading-relaxed mb-4">Restored lost masticatory function and bone integrity with an undetectable tooth-colored crown.</p>
+                        <div class="flex justify-between items-center text-[11px] text-brand-gold border-t border-white/10 pt-3">
+                            <span>Duration: Guided Surgery</span>
+                            <span class="font-semibold">Permanent Fixation</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="text-center mt-16 reveal delay-100">
+                <a href="#appointment" class="bg-brand-gold text-brand-charcoal px-8 py-4 rounded-none text-xs font-bold tracking-widest uppercase btn-gold inline-flex items-center justify-center gap-3">
+                    Book Your Smile Assessment <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECHNOLOGY SECTION -->
+    <section class="py-28 bg-brand-ivory relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-6 reveal">
+                    <div class="inline-flex items-center gap-2 bg-brand-teal/10 text-brand-teal px-3 py-1 text-[11px] font-bold uppercase tracking-widest mb-4">
+                        Precision Digital Dentistry
+                    </div>
+                    <h2 class="font-serif text-4xl md:text-5xl text-brand-charcoal mb-6 leading-tight">Technology that<br><span class="italic font-light text-brand-teal">Elevates Every Smile</span></h2>
+                    <p class="text-gray-600 font-light mb-8 text-base leading-relaxed">
+                        At <span data-config="clinicName" class="font-medium">Luméra</span>, we merge Swiss optical precision, AI-guided implant surgery, and high-resolution 3D intraoral digital scanners. No messy physical putty impressions—just instant, micrometer-accurate results.
+                    </p>
+                    
+                    <div class="grid sm:grid-cols-2 gap-6 mb-10">
+                        <div class="p-4 bg-white border border-brand-charcoal/5 shadow-sm">
+                            <div class="w-10 h-10 bg-brand-teal/10 flex items-center justify-center text-brand-teal mb-3">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+                            </div>
+                            <h4 class="font-medium text-brand-charcoal text-sm mb-1">3D Intraoral Scanner</h4>
+                            <p class="text-xs text-gray-500 font-light">Painless 60-second color scans replacing gag-inducing impressions.</p>
+                        </div>
+                        <div class="p-4 bg-white border border-brand-charcoal/5 shadow-sm">
+                            <div class="w-10 h-10 bg-brand-teal/10 flex items-center justify-center text-brand-teal mb-3">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </div>
+                            <h4 class="font-medium text-brand-charcoal text-sm mb-1">Biolase® Laser Care</h4>
+                            <p class="text-xs text-gray-500 font-light">Minimally invasive gum reshaping & suture-free, fast healing.</p>
+                        </div>
+                        <div class="p-4 bg-white border border-brand-charcoal/5 shadow-sm">
+                            <div class="w-10 h-10 bg-brand-teal/10 flex items-center justify-center text-brand-teal mb-3">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                            </div>
+                            <h4 class="font-medium text-brand-charcoal text-sm mb-1">CAD/CAM 1-Day Crowns</h4>
+                            <p class="text-xs text-gray-500 font-light">Diamond-milled porcelain crowns fabricated chairside in one visit.</p>
+                        </div>
+                        <div class="p-4 bg-white border border-brand-charcoal/5 shadow-sm">
+                            <div class="w-10 h-10 bg-brand-teal/10 flex items-center justify-center text-brand-teal mb-3">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            </div>
+                            <h4 class="font-medium text-brand-charcoal text-sm mb-1">Low-Dose CBCT 3D</h4>
+                            <p class="text-xs text-gray-500 font-light">Ultra-low radiation volumetric tomography for millimeter-safe implants.</p>
+                        </div>
+                    </div>
+
+                    <a href="#appointment" class="inline-flex items-center justify-center bg-brand-teal text-white px-8 py-4 text-xs font-semibold tracking-widest uppercase hover:bg-brand-charcoal transition-colors gap-3">
+                        Experience Our Clinic <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+                
+                <div class="lg:col-span-6 relative reveal delay-100">
+                    <div class="grid grid-cols-12 gap-4 items-center">
+                        <div class="col-span-7 space-y-4">
+                            <!-- 3D Digital Intraoral Scanner in operatory -->
+                            <div class="relative overflow-hidden border border-brand-charcoal/10 shadow-lg">
+                                <img src="./digital_scanner_3d.jpg" alt="3D Intraoral Digital Scanner & Operatory" referrerpolicy="no-referrer" class="w-full h-72 object-cover hover:scale-105 transition-transform duration-700">
+                                <div class="absolute bottom-3 left-3 bg-brand-charcoal/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold tracking-wider px-2.5 py-1">
+                                    3D Intraoral Scanner
+                                </div>
+                            </div>
+                            <!-- Biolase Dental Laser System in Action -->
+                            <div class="relative overflow-hidden border border-brand-charcoal/10 shadow-lg">
+                                <img src="./whitening_laser.jpg" alt="Laser Dentistry & Blue Light Care" referrerpolicy="no-referrer" class="w-full h-44 object-cover hover:scale-105 transition-transform duration-700">
+                                <div class="absolute bottom-3 left-3 bg-brand-teal/90 backdrop-blur-sm text-white text-[10px] uppercase font-bold tracking-wider px-2.5 py-1">
+                                    Laser Dentistry Suite
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-5 space-y-4">
+                            <!-- Digital Panoramic X-ray / Diagnostics examined by doctor -->
+                            <div class="relative overflow-hidden border border-brand-charcoal/10 shadow-lg">
+                                <img src="./dental_xray_diag.jpg" alt="Dental Diagnostics & CBCT 3D Radiograph Analysis" referrerpolicy="no-referrer" class="w-full h-80 object-cover hover:scale-105 transition-transform duration-700">
+                                <div class="absolute bottom-3 left-3 bg-brand-gold text-brand-charcoal text-[10px] uppercase font-bold tracking-wider px-2.5 py-1">
+                                    CBCT 3D & AI Analysis
+                                </div>
+                            </div>
+                            <!-- Badge -->
+                            <div class="bg-brand-charcoal text-white p-5 border border-brand-gold/30">
+                                <p class="text-2xl font-serif text-brand-gold font-light">100%</p>
+                                <p class="text-[11px] font-medium tracking-wide uppercase text-white/80">Digital CAD/CAM Workflow</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOCTOR / TEAM SECTION -->
+    <section id="team" class="py-32 bg-brand-charcoal text-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-20 reveal">
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <div class="h-px w-12 bg-brand-gold"></div>
+                    <span class="text-brand-gold text-xs font-bold tracking-widest uppercase">Master Clinicians</span>
+                    <div class="h-px w-12 bg-brand-gold"></div>
+                </div>
+                <h2 class="font-serif text-4xl md:text-5xl text-white">Our Dental <span class="italic font-light text-brand-teal">Specialists</span></h2>
+                <p class="text-white/60 font-light text-base max-w-2xl mx-auto mt-4">
+                    Trained across Switzerland, Germany, and premier Indian institutes, our dental surgeons combine artistic sensibility with clinical precision.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Doctor 1: Dr. Aarav Mehta -->
+                <div class="group reveal bg-white/5 border border-white/10 overflow-hidden hover:border-brand-gold/50 transition-all duration-500">
+                    <div class="overflow-hidden aspect-[4/5] relative bg-brand-charcoal">
+                        <img src="./dr_aarav_mehta.jpg" alt="Dr. Aarav Mehta - Dental Specialist" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                        <div class="absolute bottom-3 left-3 bg-brand-teal text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">
+                            14+ Years Experience
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-2xl text-white mb-1" data-config="doctorName">Dr. Aarav Mehta</h3>
+                        <p class="text-brand-gold text-xs tracking-widest uppercase mb-3 font-medium" data-config="doctorSpecialization">Chief Cosmetic Dentist & Implantologist</p>
+                        <p class="text-white/50 text-[11px] mb-4">BDS, MDS (Prosthodontics) • Fellowship in Aesthetic Dentistry (Frankfurt)</p>
+                        <p class="text-white/70 font-light text-xs leading-relaxed mb-6">Pioneer in porcelain veneer design, minimal-prep aesthetics, and computer-guided full-arch implant rehabilitation.</p>
+                        <div class="border-t border-white/10 pt-4 flex justify-between items-center text-xs text-brand-gold">
+                            <span>5,000+ Smiles Designed</span>
+                            <a href="#appointment" class="text-white/60 hover:text-brand-gold transition-colors font-medium">Book Consult →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctor 2: Dr. Sara Kapoor -->
+                <div class="group reveal delay-100 bg-white/5 border border-white/10 overflow-hidden hover:border-brand-gold/50 transition-all duration-500">
+                    <div class="overflow-hidden aspect-[4/5] relative bg-brand-charcoal">
+                        <img src="./doctor_sara.jpg" alt="Dr. Sara Kapoor - Orthodontist" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                        <div class="absolute bottom-3 left-3 bg-brand-gold text-brand-charcoal text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">
+                            Diamond Invisalign® Provider
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-2xl text-white mb-1">Dr. Sara Kapoor</h3>
+                        <p class="text-brand-gold text-xs tracking-widest uppercase mb-3 font-medium">Lead Orthodontist & Dentofacial Orthopedics</p>
+                        <p class="text-white/50 text-[11px] mb-4">MDS Orthodontics (AIIMS) • Certified Invisalign® Master Aligners</p>
+                        <p class="text-white/70 font-light text-xs leading-relaxed mb-6">Specializing in invisible aligner therapy, complex bite corrections, and non-extraction facial harmony treatment.</p>
+                        <div class="border-t border-white/10 pt-4 flex justify-between items-center text-xs text-brand-gold">
+                            <span>1,200+ Aligner Cases</span>
+                            <a href="#appointment" class="text-white/60 hover:text-brand-gold transition-colors font-medium">Book Consult →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctor 3: Dr. Rohan Verma -->
+                <div class="group reveal delay-200 bg-white/5 border border-white/10 overflow-hidden hover:border-brand-gold/50 transition-all duration-500">
+                    <div class="overflow-hidden aspect-[4/5] relative bg-brand-charcoal">
+                        <img src="./doctor_rohan.jpg" alt="Dr. Rohan Verma - Endodontist" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                        <div class="absolute bottom-3 left-3 bg-brand-teal text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">
+                            Microscopic Specialist
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-2xl text-white mb-1">Dr. Rohan Verma</h3>
+                        <p class="text-brand-gold text-xs tracking-widest uppercase mb-3 font-medium">Microscopic Endodontist & Laser Specialist</p>
+                        <p class="text-white/50 text-[11px] mb-4">MDS Conservative Dentistry & Endodontics • Carl Zeiss Microscopy Certified</p>
+                        <p class="text-white/70 font-light text-xs leading-relaxed mb-6">Expert in painless single-visit root canal treatments under 25x surgical magnification and tooth-saving micro-restorations.</p>
+                        <div class="border-t border-white/10 pt-4 flex justify-between items-center text-xs text-brand-gold">
+                            <span>99.4% Tooth Retention</span>
+                            <a href="#appointment" class="text-white/60 hover:text-brand-gold transition-colors font-medium">Book Consult →</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PATIENT STORIES & REVIEWS -->
+    <section class="py-24 bg-brand-ivory relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16 reveal">
+                <div class="flex items-center justify-center gap-3 mb-3">
+                    <div class="h-px w-10 bg-brand-teal"></div>
+                    <span class="text-brand-teal text-xs font-bold tracking-widest uppercase">Verified Patient Stories</span>
+                    <div class="h-px w-10 bg-brand-teal"></div>
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl text-brand-charcoal">Smiles Transformed, Lives Enriched</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-16 reveal">
+                
+                <!-- Review 1 -->
+                <div class="bg-white p-8 border border-brand-charcoal/5 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-brand-gold mb-4">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        </div>
+                        <p class="text-gray-700 font-light italic leading-relaxed text-sm mb-6">
+                            "I had gaps and discolored front teeth that made me hide my smile for years. Dr. Aarav designed 8 porcelain veneers that completely transformed my face. The 3D scan preview was uncanny—the end result looked exactly like the digital model!"
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 border-t border-gray-100 pt-4">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80" alt="Priya Sharma" referrerpolicy="no-referrer" class="w-12 h-12 rounded-full object-cover border border-brand-teal/20">
+                        <div>
+                            <p class="font-medium text-brand-charcoal text-sm">Priya Sharma</p>
+                            <p class="text-[11px] text-brand-teal font-semibold">Porcelain Veneers Makeover</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-white p-8 border border-brand-charcoal/5 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-brand-gold mb-4">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        </div>
+                        <p class="text-gray-700 font-light italic leading-relaxed text-sm mb-6">
+                            "As a corporate executive, metal braces were not an option. Dr. Sara arranged custom Invisalign aligners. In 9 months my severe lower crowding was resolved. Nobody in my meetings even noticed I was wearing them!"
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 border-t border-gray-100 pt-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" alt="Vikram Patel" referrerpolicy="no-referrer" class="w-12 h-12 rounded-full object-cover border border-brand-teal/20">
+                        <div>
+                            <p class="font-medium text-brand-charcoal text-sm">Vikram Patel</p>
+                            <p class="text-[11px] text-brand-teal font-semibold">Invisalign® Clear Aligners</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-white p-8 border border-brand-charcoal/5 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-brand-gold mb-4">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        </div>
+                        <p class="text-gray-700 font-light italic leading-relaxed text-sm mb-6">
+                            "I had a missing molar from a past accident. The 3D-guided implant procedure was genuinely painless. It took under 30 minutes, and my new ceramic tooth looks and chews just like my original tooth."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 border-t border-gray-100 pt-4">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Ananya Desai" referrerpolicy="no-referrer" class="w-12 h-12 rounded-full object-cover border border-brand-teal/20">
+                        <div>
+                            <p class="font-medium text-brand-charcoal text-sm">Ananya Desai</p>
+                            <p class="text-[11px] text-brand-teal font-semibold">Single Tooth Implant</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- APPOINTMENT & PRICING GRID -->
+            <div class="grid lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Appointment Booking (7 cols) -->
+                <div id="appointment" class="lg:col-span-7 bg-brand-charcoal p-10 md:p-12 text-white relative border border-brand-gold/30 shadow-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="inline-flex items-center gap-2 text-brand-gold text-[10px] font-bold uppercase tracking-widest mb-3">
+                            Direct Concierge Service
+                        </div>
+                        <h3 class="font-serif text-3xl text-white mb-2">Reserve Your Consultation</h3>
+                        <p class="text-white/60 font-light text-sm mb-8">Personalized 1-on-1 assessment with 3D digital scan & facial aesthetic analysis.</p>
+                        
+                        <form id="wa-form" class="space-y-4">
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-white/50 mb-1">Full Name</label>
+                                    <input type="text" id="wa-name" required placeholder="e.g., Rajesh Mehta" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 px-4 py-3 text-sm focus:outline-none focus:border-brand-gold transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-white/50 mb-1">Phone Number</label>
+                                    <input type="tel" id="wa-phone" required placeholder="+91 98765 43210" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 px-4 py-3 text-sm focus:outline-none focus:border-brand-gold transition-colors">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-white/50 mb-1">Treatment of Interest</label>
+                                <select id="wa-service" class="w-full bg-white/10 border border-white/20 text-white/90 px-4 py-3 text-sm focus:outline-none focus:border-brand-gold transition-colors appearance-none rounded-none">
+                                    <option class="text-brand-charcoal" value="General Consultation">Comprehensive Check-up & 3D Imaging</option>
+                                    <option class="text-brand-charcoal" value="Porcelain Veneers">Porcelain Veneers & Smile Makeover</option>
+                                    <option class="text-brand-charcoal" value="Invisalign Aligners">Invisalign® Invisible Aligners</option>
+                                    <option class="text-brand-charcoal" value="Dental Implants">Permanent Dental Implants</option>
+                                    <option class="text-brand-charcoal" value="Laser Whitening">In-Clinic Zoom Laser Whitening</option>
+                                </select>
+                            </div>
+                            <div class="pt-2">
+                                <button type="submit" class="w-full bg-brand-gold text-brand-charcoal py-4 text-xs font-bold tracking-widest uppercase hover:bg-white transition-colors flex justify-center items-center gap-3">
+                                    Book via WhatsApp Instant Booking <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between text-white/50 text-xs gap-4">
+                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Zero waiting time</span>
+                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 100% Confidential</span>
+                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Valet parking available</span>
+                    </div>
+                </div>
+
+                <!-- Pricing & Fee Transparency (5 cols) -->
+                <div id="pricing" class="lg:col-span-5 bg-white p-10 border border-brand-charcoal/10 shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="inline-flex items-center gap-2 text-brand-teal text-[10px] font-bold uppercase tracking-widest mb-3">
+                            Honest & Transparent
+                        </div>
+                        <h3 class="font-serif text-3xl text-brand-charcoal mb-2">Treatment Investment</h3>
+                        <p class="text-xs text-gray-500 font-light mb-6">All-inclusive pricing with zero hidden charges.</p>
+                        
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-center border-b border-gray-100 pb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-charcoal">Comprehensive Assessment</p>
+                                    <p class="text-[11px] text-gray-400">Includes 3D Intraoral Scan & Doctor Consult</p>
+                                </div>
+                                <span class="text-base font-semibold text-brand-teal">₹999</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-gray-100 pb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-charcoal">Philips Zoom Laser Whitening</p>
+                                    <p class="text-[11px] text-gray-400">Single in-clinic session up to 8 shades lighter</p>
+                                </div>
+                                <span class="text-base font-semibold text-brand-teal">₹8,500</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-gray-100 pb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-charcoal">Handcrafted Porcelain Veneer</p>
+                                    <p class="text-[11px] text-gray-400">Swiss E-Max ceramic with 10-year warranty</p>
+                                </div>
+                                <span class="text-base font-semibold text-brand-teal">From ₹14,000</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-gray-100 pb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-charcoal">Straumann® Swiss Dental Implant</p>
+                                    <p class="text-[11px] text-gray-400">3D-guided surgery with lifetime warranty</p>
+                                </div>
+                                <span class="text-base font-semibold text-brand-teal">From ₹35,000</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-gray-100 pb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-charcoal">Invisalign® Clear Aligners</p>
+                                    <p class="text-[11px] text-gray-400">Full comprehensive orthodontic package</p>
+                                </div>
+                                <span class="text-base font-semibold text-brand-teal">From ₹85,000</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+                        <p class="text-[11px] text-gray-400 font-light mb-3">0% Interest EMI financing available on major credit cards.</p>
+                        <a href="tel:+919876543210" class="inline-flex items-center gap-2 text-xs font-bold text-brand-charcoal uppercase tracking-widest hover:text-brand-teal transition-colors">
+                            Call Desk: +91 98765 43210 →
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="py-24 bg-white border-t border-brand-charcoal/5">
+        <div class="max-w-3xl mx-auto px-6 reveal">
+            <h2 class="font-serif text-3xl text-center text-brand-charcoal mb-12">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <details class="group border border-gray-100 p-6 rounded-none bg-brand-ivory cursor-pointer">
+                    <summary class="flex justify-between items-center font-medium text-brand-charcoal">
+                        Is dental treatment painful?
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="text-gray-600 font-light text-sm mt-4 leading-relaxed">Modern dentistry is largely pain-free. We use advanced local anesthetics and minimally invasive techniques to ensure your complete comfort during any procedure.</p>
+                </details>
+
+                <details class="group border border-gray-100 p-6 rounded-none bg-brand-ivory cursor-pointer">
+                    <summary class="flex justify-between items-center font-medium text-brand-charcoal">
+                        How often should I visit the dentist?
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="text-gray-600 font-light text-sm mt-4 leading-relaxed">We recommend a comprehensive check-up and professional cleaning every six months to maintain optimal oral health and catch potential issues early.</p>
+                </details>
+
+                <details class="group border border-gray-100 p-6 rounded-none bg-brand-ivory cursor-pointer">
+                    <summary class="flex justify-between items-center font-medium text-brand-charcoal">
+                        How long does teeth whitening take?
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="text-gray-600 font-light text-sm mt-4 leading-relaxed">Our in-clinic professional laser whitening typically takes about 60 to 90 minutes and can brighten your teeth by several shades in a single visit.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- CLINIC LOCATION / DUMMY GOOGLE MAP SECTION -->
+    <section id="location-map" class="relative bg-brand-charcoal border-t border-brand-gold/20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                <div>
+                    <span class="text-brand-gold text-xs font-semibold tracking-widest uppercase mb-2 block">Find Our Studio</span>
+                    <h2 class="font-serif text-3xl md:text-4xl text-white">Visit <span class="italic font-light text-brand-gold">Luméra Dental Studio</span></h2>
+                </div>
+                <div class="mt-4 md:mt-0 flex items-center gap-3 text-white/70 text-sm">
+                    <svg class="w-5 h-5 text-brand-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                    <span data-config="address">Premium Corporate Park, Ahmedabad</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Dummy Google Map Embed -->
+        <div class="w-full h-80 sm:h-96 relative overflow-hidden bg-gray-900 border-y border-white/10">
+            <iframe 
+                title="Luméra Dental Studio Dummy Google Map" 
+                class="w-full h-full border-0" 
+                loading="lazy" 
+                referrerpolicy="no-referrer"
+                allowfullscreen
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117506.96349377402!2d72.48398188219463!3d23.02024340798223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e848aba5bd449%3A0x4fcedd11614f6516!2sAhmedabad%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin">
+            </iframe>
+
+            <!-- Floating Clinic Map Information Box -->
+            <div class="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-10 bg-brand-charcoal/95 backdrop-blur-md p-4 sm:p-5 border border-brand-gold/30 shadow-2xl max-w-xs text-white">
+                <div class="flex items-center gap-2 text-brand-gold text-xs font-bold uppercase tracking-wider mb-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Open Today: 9:00 AM - 7:00 PM
+                </div>
+                <h4 class="font-serif text-base text-white font-semibold" data-config="clinicName">Luméra Dental Studio</h4>
+                <p class="text-xs text-white/70 font-light mt-1">Valet parking & wheelchair accessible dental suite.</p>
+                <a href="https://maps.google.com/?q=Ahmedabad" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-brand-gold font-medium mt-3 hover:text-white transition-colors">
+                    Open in Google Maps →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact" class="bg-brand-charcoal pt-24 pb-12 border-t-4 border-brand-gold relative overflow-hidden">
+        <!-- Google Analytics / Search Console Placeholders -->
+        <!-- GOOGLE ANALYTICS CODE GOES HERE -->
+        <!-- GOOGLE SEARCH CONSOLE VERIFICATION META TAG GOES HERE -->
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                
+                <!-- Brand Info -->
+                <div>
+                    <a href="#" class="flex items-center gap-3 mb-6">
+                        <svg class="w-7 h-7 text-brand-gold" viewBox="0 0 100 100" fill="currentColor">
+                            <path d="M50 10C25 10 10 30 10 50c0 25 20 40 40 40s40-15 40-40C90 30 75 10 50 10zm0 15c12 0 20 8 20 18v15c0 4-2 7-5 7h-5c-3 0-5-3-5-7V43c0-6-5-10-10-10s-10 4-10 10v15c0 4-2 7-5 7h-5c-3 0-5-3-5-7V43c0-10 8-18 20-18z"/>
+                        </svg>
+                        <span class="font-serif font-semibold text-lg tracking-widest uppercase text-white" data-config="clinicName">LUMÉRA</span>
+                    </a>
+                    <p class="text-white/60 font-light text-sm mb-6 leading-relaxed">Where advanced dentistry meets elegance and care. We create beautiful smiles that last a lifetime.</p>
+                    
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white/40 hover:text-brand-gold transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#" class="text-white/40 hover:text-brand-gold transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-medium mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#about" class="text-white/60 hover:text-brand-gold transition-colors text-sm font-light">About Us</a></li>
+                        <li><a href="#services" class="text-white/60 hover:text-brand-gold transition-colors text-sm font-light">Our Services</a></li>
+                        <li><a href="#results" class="text-white/60 hover:text-brand-gold transition-colors text-sm font-light">Smile Transformations</a></li>
+                        <li><a href="#team" class="text-white/60 hover:text-brand-gold transition-colors text-sm font-light">Our Team</a></li>
+                        <li><a href="#pricing" class="text-white/60 hover:text-brand-gold transition-colors text-sm font-light">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-white font-medium mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-brand-gold shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                            <span class="text-white/60 text-sm font-light" data-config="address">Premium Corporate Park, Ahmedabad</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <a href="tel:+919876543210" class="text-white/60 text-sm font-light hover:text-white transition-colors" data-config="phoneDisplay">+91 98765 43210</a>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <a href="mailto:info@lumeradental.demo" class="text-white/60 text-sm font-light hover:text-white transition-colors" data-config="email">info@lumeradental.demo</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hours -->
+                <div>
+                    <h4 class="text-white font-medium mb-6">Opening Hours</h4>
+                    <p class="text-white/60 font-light text-sm mb-2" data-config="openingHours">Monday - Saturday<br>9:00 AM - 7:00 PM</p>
+                    <p class="text-white/60 font-light text-sm">Sunday<br>Closed</p>
+                    
+                    <div class="mt-8">
+                        <a href="https://maps.google.com/?q=Ahmedabad" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-brand-gold text-xs font-semibold tracking-widest uppercase hover:text-white transition-colors">
+                            View on Google Maps <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disclaimer & Copyright -->
+            <div class="border-t border-white/10 pt-8 mt-8 flex flex-col lg:flex-row justify-between items-center gap-6">
+                <p class="text-white/30 text-[10px] text-center lg:text-left max-w-3xl font-light uppercase tracking-wider leading-relaxed">
+                    Disclaimer: Information on this website is for general educational purposes and does not replace professional medical advice. Treatment recommendations may vary after clinical examination. This is a demonstration website.
+                </p>
+                <div class="text-white/50 text-[10px] text-center lg:text-right uppercase tracking-wider">
+                    <p>&copy; 2026 Luméra Dental Studio.</p>
+                    <p class="mt-1">Designed by WebVerse Studio</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Large Background Watermark Logo -->
+        <svg class="absolute -bottom-20 -right-20 w-96 h-96 text-white/[0.02] pointer-events-none" viewBox="0 0 100 100" fill="currentColor">
+            <path d="M50 10C25 10 10 30 10 50c0 25 20 40 40 40s40-15 40-40C90 30 75 10 50 10zm0 15c12 0 20 8 20 18v15c0 4-2 7-5 7h-5c-3 0-5-3-5-7V43c0-6-5-10-10-10s-10 4-10 10v15c0 4-2 7-5 7h-5c-3 0-5-3-5-7V43c0-10 8-18 20-18z"/>
+        </svg>
+    </footer>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/919876543210?text=Hello,%20I%20would%20like%20to%20book%20a%20dental%20consultation." target="_blank" rel="noopener noreferrer" id="floating-wa" aria-label="Chat on WhatsApp" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform hover:shadow-2xl">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+
+    <!-- MODAL COMPONENT 1: Cosmetic Dentistry -->
+    <div id="modal-service-1" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-brand-charcoal/80 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-service-1')"></div>
+        <div class="modal-content relative bg-brand-ivory rounded-none w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-white/20">
+            <button onclick="closeModal('modal-service-1')" class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/10 backdrop-blur border border-brand-charcoal/10 flex items-center justify-center text-brand-charcoal hover:bg-white transition" aria-label="Close Modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="md:w-2/5 h-48 md:h-auto relative">
+                <img src="./cosmetic_mirror_smile.jpg" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover" alt="Cosmetic Dentistry & Veneers">
+            </div>
+            <div class="md:w-3/5 p-8 md:p-12">
+                <p class="text-brand-gold text-[10px] font-bold tracking-widest uppercase mb-3">Aesthetic Excellence</p>
+                <h3 class="font-serif text-3xl text-brand-charcoal mb-4">Cosmetic Dentistry</h3>
+                <p class="text-gray-600 font-light text-sm mb-8 leading-relaxed">Transform your smile with bespoke aesthetic solutions. Utilizing 3D digital smile design, we sculpt handcrafted porcelain veneers and artistic composite bonding harmonized with your unique facial features.</p>
+                
+                <div class="space-y-3 mb-8 border-t border-brand-charcoal/10 pt-6">
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Ultra-Thin Porcelain Veneers</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Micro-Layered Composite Artistry</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Complete Smile Rejuvenation</p>
+                </div>
+                
+                <a href="#appointment" onclick="closeModal('modal-service-1')" class="inline-flex items-center justify-center w-full bg-brand-charcoal text-brand-gold py-4 text-xs font-semibold tracking-widest uppercase hover:bg-brand-teal hover:text-white transition-colors">
+                    Request Consultation
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMPONENT 2: Dental Implants -->
+    <div id="modal-service-2" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-brand-charcoal/80 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-service-2')"></div>
+        <div class="modal-content relative bg-brand-ivory rounded-none w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-white/20">
+            <button onclick="closeModal('modal-service-2')" class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/10 backdrop-blur border border-brand-charcoal/10 flex items-center justify-center text-brand-charcoal hover:bg-white transition" aria-label="Close Modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="md:w-2/5 h-48 md:h-auto relative">
+                <img src="./implant_treatment.jpg" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover" alt="Dental Implants Restorative Care">
+            </div>
+            <div class="md:w-3/5 p-8 md:p-12">
+                <p class="text-brand-gold text-[10px] font-bold tracking-widest uppercase mb-3">Restorative Dentistry</p>
+                <h3 class="font-serif text-3xl text-brand-charcoal mb-4">Dental Implants</h3>
+                <p class="text-gray-600 font-light text-sm mb-8 leading-relaxed">Restore teeth with permanent Swiss Straumann® and Nobel Biocare implants. Using computer-guided 3D surgical splints, we position implants with sub-millimeter precision for painless, lifetime durability.</p>
+                
+                <div class="space-y-3 mb-8 border-t border-brand-charcoal/10 pt-6">
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Single & Multi-Tooth Implants</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> All-on-4 / All-on-6 Full Arch</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Immediate Same-Day Loading</p>
+                </div>
+                
+                <a href="#appointment" onclick="closeModal('modal-service-2')" class="inline-flex items-center justify-center w-full bg-brand-charcoal text-brand-gold py-4 text-xs font-semibold tracking-widest uppercase hover:bg-brand-teal hover:text-white transition-colors">
+                    Book Implant Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMPONENT 3: Clear Aligners -->
+    <div id="modal-service-3" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-brand-charcoal/80 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-service-3')"></div>
+        <div class="modal-content relative bg-brand-ivory rounded-none w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-white/20">
+            <button onclick="closeModal('modal-service-3')" class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/10 backdrop-blur border border-brand-charcoal/10 flex items-center justify-center text-brand-charcoal hover:bg-white transition" aria-label="Close Modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="md:w-2/5 h-48 md:h-auto relative">
+                <img src="./smile_whitening.jpg" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover" alt="Clear Aligners Orthodontics">
+            </div>
+            <div class="md:w-3/5 p-8 md:p-12">
+                <p class="text-brand-gold text-[10px] font-bold tracking-widest uppercase mb-3">Invisible Orthodontics</p>
+                <h3 class="font-serif text-3xl text-brand-charcoal mb-4">Invisalign® Clear Aligners</h3>
+                <p class="text-gray-600 font-light text-sm mb-8 leading-relaxed">Achieve straight, harmonious teeth discreetly without visible metal wires or food restrictions. Our certified Diamond Invisalign providers design your full alignment in 3D before treatment begins.</p>
+                
+                <div class="space-y-3 mb-8 border-t border-brand-charcoal/10 pt-6">
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 100% Removable for Eating & Events</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> ClinCheck® 3D Virtual Outcome Preview</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Zero Emergency Wire Appointments</p>
+                </div>
+                
+                <a href="#appointment" onclick="closeModal('modal-service-3')" class="inline-flex items-center justify-center w-full bg-brand-charcoal text-brand-gold py-4 text-xs font-semibold tracking-widest uppercase hover:bg-brand-teal hover:text-white transition-colors">
+                    Check Aligner Eligibility
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMPONENT 4: General & Advanced Dental Care -->
+    <div id="modal-service-general" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-brand-charcoal/80 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-service-general')"></div>
+        <div class="modal-content relative bg-brand-ivory rounded-none w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-white/20">
+            <button onclick="closeModal('modal-service-general')" class="absolute top-4 right-4 z-10 w-8 h-8 bg-white/10 backdrop-blur border border-brand-charcoal/10 flex items-center justify-center text-brand-charcoal hover:bg-white transition" aria-label="Close Modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="md:w-2/5 h-48 md:h-auto relative">
+                <img src="./root_canal_endo.jpg" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover" alt="Microscopic Root Canal & Precision Dentistry">
+            </div>
+            <div class="md:w-3/5 p-8 md:p-12">
+                <p class="text-brand-gold text-[10px] font-bold tracking-widest uppercase mb-3">Specialized Treatments</p>
+                <h3 class="font-serif text-3xl text-brand-charcoal mb-4">Precision Dental Care</h3>
+                <p class="text-gray-600 font-light text-sm mb-8 leading-relaxed">From single-sitting microscopic root canal treatments to Biolase® gentle gum therapy and Philips Zoom laser teeth whitening, we prioritize absolute patient comfort and natural aesthetics.</p>
+                
+                <div class="space-y-3 mb-8 border-t border-brand-charcoal/10 pt-6">
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Single-Visit Microscopic Root Canal</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> In-Clinic 45-Min Zoom Laser Whitening</p>
+                    <p class="flex items-center gap-3 text-sm text-brand-charcoal font-medium"><svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Painless Laser Gum Contouring</p>
+                </div>
+                
+                <a href="#appointment" onclick="closeModal('modal-service-general')" class="inline-flex items-center justify-center w-full bg-brand-charcoal text-brand-gold py-4 text-xs font-semibold tracking-widest uppercase hover:bg-brand-teal hover:text-white transition-colors">
+                    Schedule Your Appointment
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. DYNAMIC CONFIGURATION INJECTION
+            const updateConfig = () => {
+                document.querySelectorAll('[data-config]').forEach(el => {
+                    const key = el.getAttribute('data-config');
+                    if(CLINIC_CONFIG[key]) el.textContent = CLINIC_CONFIG[key];
+                });
+                
+                // Update WA Float link
+                const waFloat = document.getElementById('floating-wa');
+                if(waFloat) waFloat.href = `https://wa.me/${CLINIC_CONFIG.whatsappValue}?text=Hello,%20I%20would%20like%20to%20book%20a%20dental%20consultation.`;
+            };
+            updateConfig();
+
+            // 2. STICKY HEADER & SCROLL EFFECT
+            const header = document.getElementById('header');
+            const logoText = document.querySelector('.header-logo-text');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const menuBtnIcon = document.getElementById('mobile-menu-btn');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('header-scrolled');
+                    header.classList.remove('text-white', 'lg:bg-transparent', 'bg-brand-charcoal');
+                    header.classList.add('text-brand-charcoal');
+                    logoText.classList.remove('text-white');
+                    logoText.classList.add('text-brand-charcoal');
+                    navLinks.forEach(link => { link.classList.remove('hover:text-brand-gold'); link.classList.add('hover:text-brand-teal'); });
+                    menuBtnIcon.classList.remove('text-white');
+                    menuBtnIcon.classList.add('text-brand-charcoal');
+                } else {
+                    header.classList.remove('header-scrolled', 'text-brand-charcoal');
+                    header.classList.add('text-white', 'lg:bg-transparent', 'bg-brand-charcoal');
+                    logoText.classList.remove('text-brand-charcoal');
+                    logoText.classList.add('text-white');
+                    navLinks.forEach(link => { link.classList.remove('hover:text-brand-teal'); link.classList.add('hover:text-brand-gold'); });
+                    menuBtnIcon.classList.remove('text-brand-charcoal');
+                    menuBtnIcon.classList.add('text-white');
+                }
+            });
+
+            // 3. MOBILE MENU
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIconPath = document.getElementById('menu-icon-path');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            
+            let menuOpen = false;
+            
+            const toggleMenu = () => {
+                menuOpen = !menuOpen;
+                if (menuOpen) {
+                    mobileMenu.classList.add('open');
+                    menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.remove('open');
+                    menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+                    document.body.style.overflow = '';
+                }
+            };
+            
+            menuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', () => { if(menuOpen) toggleMenu(); }));
+
+            // 4. SCROLL REVEAL (Intersection Observer)
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // 5. BEFORE / AFTER SLIDER
+            const baSlider = document.getElementById('ba-slider');
+            const baBefore = document.getElementById('ba-before');
+            const baHandle = document.getElementById('ba-handle');
+            let isDragging = false;
+
+            if (baSlider) {
+                const moveSlider = (clientX) => {
+                    const rect = baSlider.getBoundingClientRect();
+                    let x = clientX - rect.left;
+                    x = Math.max(0, Math.min(x, rect.width)); 
+                    let percentage = (x / rect.width) * 100;
+                    
+                    baBefore.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+                    baHandle.style.left = `${percentage}%`;
+                };
+
+                // Mouse Events
+                baSlider.addEventListener('mousedown', (e) => { isDragging = true; e.preventDefault(); });
+                window.addEventListener('mouseup', () => isDragging = false);
+                window.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    moveSlider(e.clientX);
+                });
+
+                // Touch Events
+                baSlider.addEventListener('touchstart', (e) => {
+                    isDragging = true;
+                    moveSlider(e.touches[0].clientX);
+                }, {passive: true});
+                window.addEventListener('touchend', () => isDragging = false);
+                window.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    moveSlider(e.touches[0].clientX);
+                }, {passive: true});
+            }
+
+            // 6. WHATSAPP APPOINTMENT FORM ROUTING
+            const form = document.getElementById('wa-form');
+            if(form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('wa-name').value;
+                    const phone = document.getElementById('wa-phone').value;
+                    const service = document.getElementById('wa-service').value || 'General Inquiry';
+
+                    const text = `Hello, I would like to request an appointment.\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Treatment Interest:* ${service}`;
+                    const whatsappUrl = `https://wa.me/${CLINIC_CONFIG.whatsappValue}?text=${encodeURIComponent(text)}`;
+                    
+                    window.open(whatsappUrl, '_blank');
+                });
+            }
+
+            // 7. HERO BACKGROUND IMAGE CAROUSEL (Changes every 2 seconds on desktop & mobile)
+            const heroSlides = document.querySelectorAll('.hero-bg-slide');
+            if (heroSlides && heroSlides.length > 1) {
+                let currentHeroSlide = 0;
+                setInterval(() => {
+                    heroSlides[currentHeroSlide].classList.remove('opacity-100');
+                    heroSlides[currentHeroSlide].classList.add('opacity-0');
+
+                    currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+
+                    heroSlides[currentHeroSlide].classList.remove('opacity-0');
+                    heroSlides[currentHeroSlide].classList.add('opacity-100');
+                }, 2000);
+            }
+        });
+
+        // 7. MODAL CONTROLS (Global)
+        window.openModal = function(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+        window.closeModal = function(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        };
+    </script>
+</body>
+</html>

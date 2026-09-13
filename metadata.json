@@ -1,0 +1,6 @@
+{
+  "name": "Luméra Dental Studio",
+  "description": "Ultra-premium, modern dental clinic and cosmetic dentistry website with comprehensive smile care, before-and-after transformations, and instant appointment booking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

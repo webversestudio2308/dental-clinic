@@ -1,11 +1,14 @@
-<div align="center">
+# Luméra Dental Studio
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Ultra-premium, modern dental clinic and cosmetic dentistry website featuring comprehensive smile care, before-and-after transformations, patient reviews, treatment guides, interactive dummy map, and direct appointment booking.
 
-  <h1>Built with AI Studio</h2>
-
-  <p>The fastest path from prompt to production with Gemini.</p>
-
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+## Overview
+- **Clinic Name:** Luméra Dental Studio
+- **Specialty:** Advanced Dentistry & Cosmetic Artistry
+- **Features:** 
+  - Responsive Hero with 2-second background showcase
+  - Interactive Before & After smile transformation slider
+  - Specialist Doctor profiles
+  - Treatment catalog with pricing
+  - Interactive Google Maps location preview
+  - WhatsApp and online appointment booking
